@@ -12,31 +12,44 @@ struct ContentView: View {
     @State private var animationAmount = 0.0
     @State private var enabled = false
     @State private var dragAmount = CGSize.zero
+    @State private var isShowingRed = false
     
     
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(0..<letters.count, id: \.self) { num in
-                Text(String(letters[num]))
-                    .padding(5)
-                    .font(.title)
-                    .background(enabled ? .blue : .red)
-                    .offset(dragAmount)
-                    .animation(.linear.delay(Double(num) / 20), value: dragAmount)
+        VStack(spacing: 0) {
+//            ForEach(0..<letters.count, id: \.self) { num in
+//                Text(String(letters[num]))
+//                    .padding(5)
+//                    .font(.title)
+//                    .background(enabled ? .blue : .red)
+//                    .offset(dragAmount)
+//                    .animation(.linear.delay(Double(num) / 20), value: dragAmount)
+//            }
+            Button("tap Me") {
+                //                enabled.toggle()
+                withAnimation {
+                    isShowingRed.toggle()
+                }
+            }
+            if isShowingRed {
+                Rectangle()
+                    .fill(.red)
+                    .frame(width: 200, height: 200)
+                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
             }
         }
-        .gesture(
-            DragGesture()
-                .onChanged { dragAmount = $0.translation }
-                .onEnded { _ in
-                    dragAmount = .zero
-                    enabled.toggle()
-                }
-            )
+//        .gesture(
+//            DragGesture()
+//                .onChanged { dragAmount = $0.translation }
+//                .onEnded { _ in
+//                    dragAmount = .zero
+//                    enabled.toggle()
+//                }
+//            )
             
 //            Button("tap Me") {
 //                enabled.toggle()
-//            
+//
 //            LinearGradient(colors: [.yellow, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
 //                .frame(width: 300, height: 200)
 //                .clipShape(.rect(cornerRadius: 10))
@@ -49,7 +62,7 @@ struct ContentView: View {
 //                    //run a closure whenever the user lifts their finger off the screen
 //                        .onEnded { _ in dragAmount = .zero }
 //                )
-//                
+//
                 
 //            }
 //            .frame(width: 200, height: 200)
@@ -58,7 +71,7 @@ struct ContentView: View {
 //            .foregroundStyle(.white)
 //            .clipShape(.rect(cornerRadius: enabled ? 60 : 0))
 //            .animation(.spring(duration: 1, bounce: 0.6), value: enabled)
-//            
+//
             
             
             
