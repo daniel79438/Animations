@@ -15,31 +15,41 @@ struct ContentView: View {
     
     
     var body: some View {
-        print(animationAmount)
-        return VStack {
-            Stepper("Scale amount", value: $animationAmount.animation(
-                .easeInOut(duration: 1)
-                .repeatCount(3, autoreverses: true)
-            ), in: 1...10)
-            
-            Spacer()
+        HStack(spacing: 0) {
+            ForEach(0..<letters.count, id: \.self) { num in
+                Text(String(letters[num]))
+                    .padding(5)
+                    .font(.title)
+                    .background(enabled ? .blue : .red)
+                    .offset(dragAmount)
+                    .animation(.linear.delay(Double(num) / 20), value: dragAmount)
+            }
+        }
+        .gesture(
+            DragGesture()
+                .onChanged { dragAmount = $0.translation }
+                .onEnded { _ in
+                    dragAmount = .zero
+                    enabled.toggle()
+                }
+            )
             
 //            Button("tap Me") {
 //                enabled.toggle()
-            
-            LinearGradient(colors: [.yellow, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
-                .frame(width: 300, height: 200)
-                .clipShape(.rect(cornerRadius: 10))
-                .offset(dragAmount)
-                .animation(.bouncy, value: dragAmount)
-                .gesture(
-                    DragGesture()
-                    //run whenever the user moves their finger
-                        .onChanged { dragAmount = $0.translation }
-                    //run a closure whenever the user lifts their finger off the screen
-                        .onEnded { _ in dragAmount = .zero }
-                )
-                
+//            
+//            LinearGradient(colors: [.yellow, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
+//                .frame(width: 300, height: 200)
+//                .clipShape(.rect(cornerRadius: 10))
+//                .offset(dragAmount)
+//                .animation(.bouncy, value: dragAmount)
+//                .gesture(
+//                    DragGesture()
+//                    //run whenever the user moves their finger
+//                        .onChanged { dragAmount = $0.translation }
+//                    //run a closure whenever the user lifts their finger off the screen
+//                        .onEnded { _ in dragAmount = .zero }
+//                )
+//                
                 
 //            }
 //            .frame(width: 200, height: 200)
@@ -49,7 +59,6 @@ struct ContentView: View {
 //            .clipShape(.rect(cornerRadius: enabled ? 60 : 0))
 //            .animation(.spring(duration: 1, bounce: 0.6), value: enabled)
 //            
-            Spacer()
             
             
             
@@ -72,7 +81,6 @@ struct ContentView: View {
         }
     }
     
-    }
 
 #Preview {
     ContentView()
