@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    let letters = Array("Hello SwiftUI")
     @State private var animationAmount = 0.0
+    @State private var enabled = false
+    @State private var dragAmount = CGSize.zero
     
     
     var body: some View {
@@ -21,17 +24,37 @@ struct ContentView: View {
             
             Spacer()
             
-            Button("tap Me") {
-                withAnimation(.spring(duration: 1, bounce: 0.5)) {
-                    animationAmount += 360
-                }
-            }
-            .padding(50)
-            .background(.red)
-            .foregroundStyle(.white)
-            .clipShape(.circle)
-            .rotation3DEffect(.degrees(animationAmount), axis: (x: 0, y: 1, z: 0))
-//            .scaleEffect(animationAmount)
+//            Button("tap Me") {
+//                enabled.toggle()
+            
+            LinearGradient(colors: [.yellow, .red], startPoint: .topLeading, endPoint: .bottomTrailing)
+                .frame(width: 300, height: 200)
+                .clipShape(.rect(cornerRadius: 10))
+                .offset(dragAmount)
+                .animation(.bouncy, value: dragAmount)
+                .gesture(
+                    DragGesture()
+                    //run whenever the user moves their finger
+                        .onChanged { dragAmount = $0.translation }
+                    //run a closure whenever the user lifts their finger off the screen
+                        .onEnded { _ in dragAmount = .zero }
+                )
+                
+                
+//            }
+//            .frame(width: 200, height: 200)
+//            .background(enabled ? .blue : .red)
+//            .animation(nil, value: enabled)
+//            .foregroundStyle(.white)
+//            .clipShape(.rect(cornerRadius: enabled ? 60 : 0))
+//            .animation(.spring(duration: 1, bounce: 0.6), value: enabled)
+//            
+            Spacer()
+            
+            
+            
+            
+            //            .scaleEffect(animationAmount)
             //        .blur(radius: (animationAmount - 1) * 3)
             //        .overlay(
             //            Circle()
@@ -48,7 +71,8 @@ struct ContentView: View {
             //            animationAmount = 2
         }
     }
-}
+    
+    }
 
 #Preview {
     ContentView()
